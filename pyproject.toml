@@ -1,0 +1,12 @@
+[project]
+name = "metastablex"
+version = "0.1.0"
+description = "Meta-Stable Dynamics Framework for Critical Transitions"
+authors = [{name="Seu Nome"}]
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+    "hmmlearn"
+]

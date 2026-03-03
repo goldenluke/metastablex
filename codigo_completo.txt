@@ -1,0 +1,451 @@
+# === Início do arquivo: ./app.py ===
+
+import streamlit as st
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+from scipy import stats, signal
+from pysus.online_data.SIH import SIH
+import math
+import warnings
+import os
+
+# ============================================================
+# CONFIGURAÇÃO DA PÁGINA
+# ============================================================
+st.set_page_config(page_title="QWAN Ultra-Deep Health Complexity", layout="wide")
+warnings.filterwarnings('ignore')
+
+# Cria pasta para salvar plots
+os.makedirs("plots", exist_ok=True)
+
+# ============================================================
+# ENGINE DE COMPLEXIDADE TOTAL
+# ============================================================
+class UltraHealthEngine:
+    def __init__(self, series):
+        self.series = np.array(series, dtype=float)
+        self.returns = np.diff(np.log(self.series + 1e-6))
+
+    def dfa_alpha(self, ts):
+        if len(ts) < 20: return 0.5
+        y = np.cumsum(ts - np.mean(ts))
+        n_vals = np.unique(np.logspace(1, 2, 8).astype(int))
+        rms_vals = []
+        for n in n_vals:
+            segments = len(y) // n
+            if segments == 0: continue
+            rms = np.sqrt(np.mean([np.mean((y[i*n:(i+1)*n] - np.polyval(np.polyfit(np.arange(n), y[i*n:(i+1)*n], 1), np.arange(n)))**2) for i in range(segments)]))
+            rms_vals.append(rms)
+        if len(rms_vals) < 2: return 0.5
+        return np.polyfit(np.log(n_vals[:len(rms_vals)]), np.log(rms_vals), 1)[0]
+
+    def lempel_ziv(self, ts):
+        if len(ts) < 5: return 0
+        s = "".join(['1' if x > np.median(ts) else '0' for x in ts])
+        n = len(s)
+        i, u, v, w, c = 1, 1, 1, 1, 1
+        while v + w <= n:
+            if s[i:i+v] == s[i+w:i+v+w]: v += 1
+            else: w += 1; c += 1; v = 1
+        return (c * math.log2(n)) / n
+
+    def fisher_info(self, ts):
+        if len(ts) < 10: return 0
+        h, _ = np.histogram(ts, bins=20, density=True)
+        prob = h / (np.sum(h) + 1e-12)
+        return 4 * np.sum(np.diff(np.sqrt(prob))**2)
+
+    def permutation_entropy(self, ts, d=3):
+        ts_arr = np.array(ts)
+        if len(ts_arr) < d: return 1.0
+        patterns = [tuple(np.argsort(ts_arr[i:i+d])) for i in range(len(ts_arr)-d+1)]
+        _, counts = np.unique(patterns, axis=0, return_counts=True)
+        p = counts / counts.sum()
+        return -np.sum(p * np.log2(p)) / np.log2(math.factorial(d))
+
+    def reconstruct_potential(self):
+        hist, bins = np.histogram(self.returns, bins=30, density=True)
+        centers = (bins[:-1] + bins[1:]) / 2
+        sigma = np.std(self.returns)
+        p = hist + 1e-12
+        U = - (sigma**2 / 2) * np.log(p)
+        return centers, U
+
+    def multiscale_entropy(self, max_scale=10):
+        ts = self.returns
+        n = len(ts)
+        entropies = []
+        for scale in range(1, max_scale + 1):
+            if n // scale < 5:
+                entropies.append(1.0)
+                continue
+            rescaled = ts[:n - n % scale].reshape(-1, scale).mean(axis=1)
+            entropies.append(self.permutation_entropy(rescaled))
+        return np.array(entropies)
+
+    def get_rolling_metrics(self, window=14):
+        metrics = {
+            'resilience': [], 'alpha': [], 'lz': [], 'fisher': [],
+            'ac1': [], 'vol': [], 'skew': [], 'kurt': []
+        }
+        for i in range(window, len(self.returns)):
+            slice_ts = self.returns[i-window:i]
+            a = self.dfa_alpha(slice_ts)
+            lz = self.lempel_ziv(slice_ts)
+            f = self.fisher_info(slice_ts)
+            ac1 = pd.Series(slice_ts).autocorr(lag=1)
+            vol = np.std(slice_ts)
+            ac1_norm = ((ac1 if not np.isnan(ac1) else 0) + 1) / 2
+            risk = (ac1_norm + a + (np.log10(vol**2+1e-9)+4)/4) / 3
+            metrics['resilience'].append(1 - risk)
+            metrics['alpha'].append(a)
+            metrics['lz'].append(lz)
+            metrics['fisher'].append(f)
+            metrics['ac1'].append(ac1)
+            metrics['vol'].append(vol)
+            metrics['skew'].append(stats.skew(slice_ts))
+            metrics['kurt'].append(stats.kurtosis(slice_ts))
+        return {k: np.array(v) for k, v in metrics.items()}
+
+# ============================================================
+# PIPELINE DE DADOS
+# ============================================================
+@st.cache_data
+def load_data(uf, ano, mes, cid, agg):
+    try:
+        sih = SIH(); sih.load()
+        files = sih.get_files(group='RD', uf=uf, year=ano, month=mes)
+        if not files: return pd.Series()
+        df = sih.download(files[0]).to_dataframe()
+        if cid:
+            df = df[df['DIAG_PRINC'].str.startswith(cid.upper(), na=False)]
+        df['DT_INTER'] = pd.to_datetime(df['DT_INTER'], errors='coerce')
+        ts = df.groupby('DT_INTER').size().rename('internacoes').sort_index()
+        if agg == 'W': ts = ts.resample('W').sum()
+        return ts
+    except Exception as e:
+        st.error(f"Erro ao descarregar dados: {e}")
+        return pd.Series()
+
+# ============================================================
+# INTERFACE STREAMLIT
+# ============================================================
+st.title("🔬 Monitor de Complexidade Ultra-Profunda: Vigilância em Saúde")
+st.markdown("Aplicação de **Termodinâmica e Física Não-Linear** sobre os dados do SIH/SUS para deteção antecipada de colapsos.")
+
+# Sidebar
+st.sidebar.header("🕹️ Painel de Controlo")
+with st.sidebar:
+    uf = st.selectbox("Estado (UF)", ["SP", "RJ", "TO", "MG", "BA", "PR", "AM"], index=0)
+    ano = st.number_input("Ano", 2015, 2024, 2023)
+    mes = st.slider("Mês", 1, 12, 1)
+    cid = st.text_input("Capítulo CID-10", "J")
+    agg = st.selectbox("Agregação", ["D", "W"], format_func=lambda x: "Diária" if x=="D" else "Semanal")
+    window = st.slider("Janela de Observação (Rolling)", 7, 30, 14)
+    theme = st.toggle("Modo Escuro", value=True)
+
+# Execução
+if st.sidebar.button("🚀 Executar Diagnóstico de 16 Pontos"):
+    ts = load_data(uf, ano, mes, cid, agg)
+    if ts.empty or len(ts) < window:
+        st.warning("⚠️ Dados insuficientes. Tente um período maior ou remova o filtro CID.")
+    else:
+        engine = UltraHealthEngine(ts)
+        roll = engine.get_rolling_metrics(window=window)
+
+        # --- KPIs ---
+        res_atual = roll['resilience'][-1]
+        alpha_atual = roll['alpha'][-1]
+        st.header(f"📊 Diagnóstico Estrutural: {uf} | CID {cid}")
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Resiliência Sistémica", f"{res_atual:.3f}", delta=f"{res_atual-0.4:.3f}")
+        c2.metric("Memória Fractal (Alpha)", f"{alpha_atual:.3f}")
+        c3.metric("Ordem (Fisher)", f"{roll['fisher'][-1]:.2f}")
+        c4.metric("Inovação (LZ)", f"{roll['lz'][-1]:.2f}")
+
+        # Mensagem de alerta
+        if res_atual < 0.45:
+            st.error("🚨 **ALERTA CRÍTICO**: Baixa resiliência.")
+        elif alpha_atual > 0.65:
+            st.warning("⚠️ **ALERTA DE PERSISTÊNCIA**: Crescimento ativo.")
+        else:
+            st.success("✅ **SISTEMA EM EQUILÍBRIO**")
+
+        st.divider()
+
+        # --- MOSAICO DE GRÁFICOS ---
+        plt.style.use('dark_background' if theme else 'default')
+        fig = plt.figure(figsize=(24, 32))
+        gs = gridspec.GridSpec(7, 3, figure=fig)
+        clr = {'b': '#3498db', 'r': '#e74c3c', 'g': '#2ecc71', 'p': '#9b59b6', 'o': '#f39c12', 'c': '#1abc9c', 'y': '#f1c40f'}
+
+        # Gráfico 1
+        ax1 = fig.add_subplot(gs[0, :])
+        ax1.plot(ts.values, color=clr['b'], lw=4)
+        ax1.fill_between(range(len(ts)), ts.values, color=clr['b'], alpha=0.1)
+        ax1.set_title("1. SÉRIE TEMPORAL BRUTA", fontsize=18)
+        ax1.grid(alpha=0.1)
+
+        # Gráficos 2 e 3
+        ax2 = fig.add_subplot(gs[1, :2])
+        ax2.plot(roll['resilience'], color=clr['g'], lw=4)
+        ax2.axhline(y=0.4, color=clr['r'], ls='--')
+        ax2.set_title("2. MONITOR DE RESILIÊNCIA", fontsize=16)
+        ax2.grid(alpha=0.1)
+
+        ax3 = fig.add_subplot(gs[1, 2])
+        ax3.plot(roll['ac1'], color=clr['r'], lw=3)
+        ax3.axhline(y=0, color='white', alpha=0.3)
+        ax3.set_title("3. LENTIDÃO CRÍTICA", fontsize=14)
+
+        # Gráficos 4-6
+        ax4 = fig.add_subplot(gs[2, 0])
+        ax4.plot(roll['alpha'], color=clr['o'], lw=2)
+        ax4.set_title("4. MEMÓRIA FRACTAL (DFA ALPHA)", fontsize=12)
+
+        ax5 = fig.add_subplot(gs[2, 1])
+        ax5.plot(roll['fisher'], color=clr['c'], lw=2)
+        ax5.set_title("5. INFORMAÇÃO DE FISHER", fontsize=12)
+
+        ax6 = fig.add_subplot(gs[2, 2])
+        ax6.plot(roll['lz'], color=clr['p'], lw=2)
+        ax6.set_title("6. COMPLEXIDADE LZ", fontsize=12)
+
+        # Gráficos 7-9
+        ax7 = fig.add_subplot(gs[3, 0])
+        centers, U = engine.reconstruct_potential()
+        ax7.plot(centers, U, 'w-', lw=3)
+        ax7.fill_between(centers, U, np.max(U), color='white', alpha=0.1)
+        ax7.set_title("7. POÇO DE POTENCIAL", fontsize=12)
+
+        ax8 = fig.add_subplot(gs[3, 1])
+        ax8.scatter(ts.values[:-1], ts.values[1:], c=range(len(ts)-1), cmap='cool', s=30)
+        ax8.set_title("8. ATRATOR DE FASE", fontsize=12)
+
+        ax9 = fig.add_subplot(gs[3, 2])
+        f, pxx = signal.welch(engine.returns, fs=1.0)
+        ax9.semilogy(f, pxx, color=clr['b'])
+        ax9.set_title("9. ESPECTRO DE POTÊNCIA", fontsize=12)
+
+        # Gráficos 10-12
+        ax10 = fig.add_subplot(gs[4, 0])
+        ax10.hist(engine.returns, bins=25, color=clr['b'], alpha=0.5, density=True)
+        ax10.set_title("10. PDF DAS VARIAÇÕES", fontsize=12)
+
+        ax11 = fig.add_subplot(gs[4, 1])
+        ax11.plot(roll['skew'], color=clr['y'], lw=2)
+        ax11.axhline(y=0, color='white', alpha=0.2)
+        ax11.set_title("11. ASSIMETRIA", fontsize=12)
+
+        ax12 = fig.add_subplot(gs[4, 2])
+        ax12.plot(roll['kurt'], color='#e67e22', lw=2)
+        ax12.set_title("12. CURTOSE", fontsize=12)
+
+        # Gráficos 13-15
+        ax13 = fig.add_subplot(gs[5, 0])
+        mse = engine.multiscale_entropy()
+        ax13.plot(range(1, 11), mse, 'o-', color=clr['g'])
+        ax13.set_title("13. COMPLEXIDADE POR ESCALA", fontsize=12)
+
+        ax14 = fig.add_subplot(gs[5, 1])
+        ax14.plot(roll['vol'], color='yellow', lw=2)
+        ax14.set_title("14. VOLATILIDADE", fontsize=12)
+
+        ax15 = fig.add_subplot(gs[5, 2])
+        ax15.scatter(roll['lz'], roll['fisher'], c=roll['resilience'], cmap='RdYlGn', s=40)
+        ax15.set_title("15. PLANO COMPLEXIDADE-ORDEM", fontsize=12)
+
+        # Gráfico 16
+        ax16 = fig.add_subplot(gs[6, :])
+        ax16.axis('off')
+        interp_text = (
+            f"--- RESUMO TÉCNICO ---\n"
+            f"SISTEMA: {uf} | CID: {cid}\n"
+            f"LENTIDÃO CRÍTICA (AC1): {'DETECTADA' if roll['ac1'][-1] > 0 else 'AUSENTE'}\n"
+            f"ESTABILIDADE TERMODINÂMICA: {'VALE PROFUNDO' if np.ptp(U) > 2.5 else 'VALE RASO'}\n"
+            f"COMPLEXIDADE ESTRUTURAL: {'ALTA' if roll['lz'][-1] > 3 else 'BAIXA'}"
+        )
+        ax16.text(0.05, 0.5, interp_text, fontsize=20, family='monospace', fontweight='bold',
+                  bbox=dict(facecolor='#222', alpha=0.8))
+
+        plt.tight_layout(pad=4.0)
+
+        # --- SALVAR FIGURA ---
+        plt.savefig("plots/metastablex_mosaic.png", dpi=300)
+        plt.savefig("plots/metastablex_mosaic.pdf")
+
+        # --- EXIBIR NO STREAMLIT ---
+        st.pyplot(fig)
+else:
+    st.info("👋 Configure os parâmetros na barra lateral e clique em 'Executar'.")
+
+
+# === Fim do arquivo: ./app.py ===
+
+# === Início do arquivo: ./metastablex/__init__.py ===
+
+
+
+# === Fim do arquivo: ./metastablex/__init__.py ===
+
+# === Início do arquivo: ./metastablex/core/instability.py ===
+
+
+
+# === Fim do arquivo: ./metastablex/core/instability.py ===
+
+# === Início do arquivo: ./metastablex/core/potential.py ===
+
+import numpy as np
+
+def potential_landscape(returns, bins=30):
+    hist, bins = np.histogram(returns, bins=bins, density=True)
+    centers = (bins[:-1] + bins[1:]) / 2
+    sigma = np.std(returns)
+    U = -(sigma**2 / 2) * np.log(hist + 1e-12)
+    return centers, U
+
+
+# === Fim do arquivo: ./metastablex/core/potential.py ===
+
+# === Início do arquivo: ./metastablex/core/signals.py ===
+
+# metastablex/core/signals.py
+
+import numpy as np
+import pandas as pd
+from scipy import stats
+
+# ========================================
+# SÉRIES TEMPORAIS SINTÉTICAS
+# ========================================
+
+def synthetic_series(n=100, freq=1.0, noise_level=0.1, seed=None):
+    """
+    Gera uma série temporal sintética para testes.
+
+    Parâmetros:
+    ----------
+    n : int
+        Número de pontos da série
+    freq : float
+        Frequência do sinal senoidal base
+    noise_level : float
+        Desvio padrão do ruído adicionado
+    seed : int ou None
+        Semente para reprodutibilidade
+
+    Retorna:
+    -------
+    ts : np.ndarray
+        Série temporal sintética
+    """
+    if seed is not None:
+        np.random.seed(seed)
+    t = np.linspace(0, 10, n)
+    ts = np.sin(2 * np.pi * freq * t) + noise_level * np.random.randn(n)
+    return ts
+
+# ========================================
+# SENSORES BÁSICOS DE COMPLEXIDADE
+# ========================================
+
+def rolling_volatility(ts, window=10):
+    """
+    Calcula volatilidade (desvio padrão móvel) de uma série.
+    """
+    ts = pd.Series(ts)
+    return ts.rolling(window).std().to_numpy()
+
+def autocorr_lag1(ts):
+    """
+    Calcula autocorrelação de lag 1
+    """
+    ts = pd.Series(ts)
+    return ts.autocorr(lag=1)
+
+def skewness(ts):
+    """
+    Calcula skewness (assimetria) da série
+    """
+    return stats.skew(ts)
+
+def kurtosis(ts):
+    """
+    Calcula kurtosis (curtose) da série
+    """
+    return stats.kurtosis(ts)
+
+
+# === Fim do arquivo: ./metastablex/core/signals.py ===
+
+# === Início do arquivo: ./metastablex/utils/preprocessing.py ===
+
+
+
+# === Fim do arquivo: ./metastablex/utils/preprocessing.py ===
+
+# === Início do arquivo: ./metastablex/dynamics/neural_ode.py ===
+
+
+
+# === Fim do arquivo: ./metastablex/dynamics/neural_ode.py ===
+
+# === Início do arquivo: ./metastablex/control/rl.py ===
+
+import numpy as np
+
+class QLearningController:
+    def __init__(self, n_states, n_actions, alpha=0.1, gamma=0.9):
+        self.q = np.zeros((n_states, n_actions))
+        self.alpha = alpha
+        self.gamma = gamma
+
+    def act(self, state):
+        return np.argmax(self.q[state])
+
+    def update(self, s, a, r, s_next):
+        best_next = np.max(self.q[s_next])
+        self.q[s, a] += self.alpha * (r + self.gamma * best_next - self.q[s, a])
+
+
+# === Fim do arquivo: ./metastablex/control/rl.py ===
+
+# === Início do arquivo: ./metastablex/regimes/bayesian.py ===
+
+import numpy as np
+
+class BayesianFilter:
+    def __init__(self, n_states):
+        self.belief = np.ones(n_states) / n_states
+
+    def update(self, likelihood):
+        posterior = likelihood * self.belief
+        self.belief = posterior / np.sum(posterior)
+        return self.belief
+
+
+# === Fim do arquivo: ./metastablex/regimes/bayesian.py ===
+
+# === Início do arquivo: ./metastablex/regimes/hmm.py ===
+
+from hmmlearn.hmm import GaussianHMM
+
+class RegimeHMM:
+    def __init__(self, n_states=3):
+        self.model = GaussianHMM(n_components=n_states, covariance_type="full")
+
+    def fit(self, X):
+        self.model.fit(X)
+
+    def predict(self, X):
+        return self.model.predict(X)
+
+    def probabilities(self, X):
+        return self.model.predict_proba(X)
+
+
+# === Fim do arquivo: ./metastablex/regimes/hmm.py ===
+
