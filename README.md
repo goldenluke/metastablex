@@ -1,5 +1,7 @@
 # QWAN — Quantum Wholeness Applied to Nonlinear Health Systems
 
+![QWAN Framework Overview](Untitled2.jpeg)
+
 > Early Warning Signals of Systemic Instability in Hospitalization Dynamics  
 > A Non-Equilibrium Statistical Physics Framework Applied to SIH/SUS
 
