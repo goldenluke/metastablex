@@ -1,4 +1,4 @@
-# QWAN — Quantum Wholeness Applied to Nonlinear Health Systems
+# QWAN — Quality Wihtou a Name to Nonlinear Health Systems
 
 ![QWAN Framework Overview](Untitled2.jpeg)
 
