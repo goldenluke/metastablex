@@ -320,7 +320,7 @@ Rather than reactive epidemiological monitoring, it enables:
 
 ---
 
-# Citation (Draft)
+# Citation
 
 If using this framework, cite as:
 
