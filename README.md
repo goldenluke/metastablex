@@ -9,6 +9,8 @@
 
 ## Overview
 
+Article: https://goldenluke.github.io/qwan_zero_pipeline/index4.html
+
 QWAN is a theoretical and computational framework for detecting **critical transitions in health systems** using tools from:
 
 - Nonlinear dynamical systems
