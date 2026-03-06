@@ -1,4 +1,4 @@
-# QWAN — Quality Wihtou a Name to Nonlinear Health Systems
+# QWAN — Quality Wihtout a Name to Nonlinear Health Systems
 
 ![QWAN Framework Overview](Untitled2.jpeg)
 
