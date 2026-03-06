@@ -9,7 +9,7 @@ from pysus.online_data.SIH import SIH
 import math
 import warnings
 import os
-
+from metastablex.core.cardiology import simulate_hrv
 # ============================================================
 # PAGE CONFIGURATION
 # ============================================================
@@ -118,24 +118,11 @@ class UltraHealthEngine:
 # DATA PIPELINE
 # ============================================================
 @st.cache_data
-def load_data(uf, year, month, cid, agg):
-    try:
-        sih = SIH()
-        sih.load()
-        files = sih.get_files(group='RD', uf=uf, year=year, month=month)
-        if not files:
-            return pd.Series()
-        df = sih.download(files[0]).to_dataframe()
-        if cid:
-            df = df[df['DIAG_PRINC'].str.startswith(cid.upper(), na=False)]
-        df['DT_INTER'] = pd.to_datetime(df['DT_INTER'], errors='coerce')
-        ts = df.groupby('DT_INTER').size().rename('hospitalizations').sort_index()
-        if agg == 'W':
-            ts = ts.resample('W').sum()
-        return ts
-    except Exception as e:
-        st.error(f"Error downloading data: {e}")
-        return pd.Series()
+@st.cache_data
+def load_cardiology_data(regime, n=1500):
+    rr = simulate_hrv(n=n, regime=regime)
+    ts = pd.Series(rr)
+    return ts
 
 # ============================================================
 # STREAMLIT UI
