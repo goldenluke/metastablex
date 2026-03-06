@@ -1,291 +1,134 @@
 # 🔬 QWAN Ultra-Deep Health Complexity
 ### Sistema Termodinâmico de Alerta Precoce para Instabilidade em Sistemas de Saúde
 
-**Autor:** Lucas Amaral Dourado  
-**Licença:** MIT  
+# Framework Científica da Aplicação
+
+A aplicação **QWAN Ultra-Deep Health Complexity** não é apenas um dashboard de visualização de dados.  
+Ela constitui uma **framework computacional para análise de instabilidade sistêmica em sistemas complexos**, combinando conceitos de:
+
+- Física estatística
+- Dinâmica não-linear
+- Teoria da informação
+- Processamento de sinais
+- Aprendizado de máquina
+- Vigilância epidemiológica computacional
+
+A framework foi projetada como um **pipeline modular de análise de complexidade**, capaz de transformar **séries temporais epidemiológicas brutas** em **diagnósticos estruturais profundos sobre estabilidade sistêmica**.
 
 ---
 
-# Visão Geral
+# Visão Conceitual da Framework
 
-**QWAN Ultra-Deep Health Complexity** é uma plataforma científica experimental que aplica **física estatística, dinâmica não-linear, teoria da informação e ciência de sistemas complexos** à **vigilância em saúde pública**.
+A arquitetura da framework pode ser descrita como um sistema de **camadas analíticas hierárquicas**.
 
-O sistema consome dados de internações hospitalares do **SIH/SUS** e executa **diagnósticos multicamadas de complexidade**, capazes de identificar **sinais precoces de instabilidade sistêmica**, incluindo:
+$$
+\text{Dados} \rightarrow \text{Sinais} \rightarrow \text{Complexidade} \rightarrow \text{Dinâmica} \rightarrow \text{Regimes} \rightarrow \text{Controle}
+$$
 
-- Lentidão crítica (critical slowing down)
-- Perda de resiliência
-- Persistência fractal
-- Transições entrópicas
-- Deformação da paisagem de potencial
-
-O projeto integra:
-
-- **Dashboards interativos em Streamlit**
-- **Métricas de teoria da complexidade**
-- **Reconstrução de potenciais termodinâmicos**
-- **Processamento de sinais**
-- **Detecção de regimes com aprendizado de máquina**
-
-O resultado é um **sistema de diagnóstico estrutural em 16 pontos** projetado para monitorar **metastabilidade em sistemas de saúde**.
+Cada camada extrai um nível mais profundo de informação sobre o comportamento do sistema.
 
 ---
 
-# Motivação Científica
+# Camada 1 — Ingestão de Dados
 
-Sistemas complexos próximos de **transições críticas** frequentemente exibem **assinaturas estatísticas universais** antes de colapsos.
+A primeira camada da framework é responsável pela **extração de dados epidemiológicos do SIH/SUS**.
 
-Se representarmos o estado do sistema por uma série temporal:
-
-$$
-x_t
-$$
-
-À medida que o sistema se aproxima de uma transição crítica, vários indicadores mudam sistematicamente.
-
----
-
-### Lentidão Crítica
-
-A autocorrelação cresce:
-
-$$
-AC(1) \rightarrow 1
-$$
-
-porque o sistema demora mais para retornar ao equilíbrio após perturbações.
-
----
-
-### Aumento da Variância
-
-A variância aumenta porque o sistema passa a explorar uma região maior do espaço de estados:
-
-$$
-\sigma^2 = Var(x_t)
-$$
-
----
-
-### Memória Fractal
-
-Correlação de longo alcance emerge:
-
-$$
-F(s) \sim s^\alpha
-$$
-
-onde:
-
-- \( \alpha > 0.5 \) indica persistência
-- \( \alpha < 0.5 \) indica antipersistência
-
----
-
-### Colapso Entrópico
-
-Métricas de complexidade como entropia podem diminuir à medida que o sistema se aproxima de estados altamente estruturados ou colapsos organizacionais.
-
----
-
-O projeto operacionaliza esses princípios em um **motor de sensores de complexidade**.
-
----
-
-# Arquitetura
+A biblioteca utilizada é:
 
 ```
-project/
-│
-├── app.py
-│
-├── metastablex/
-│   ├── core/
-│   │   ├── signals.py
-│   │   ├── potential.py
-│   │   └── instability.py
-│   │
-│   ├── regimes/
-│   │   ├── hmm.py
-│   │   └── bayesian.py
-│   │
-│   ├── dynamics/
-│   │   └── neural_ode.py
-│   │
-│   ├── control/
-│   │   └── rl.py
-│   │
-│   └── utils/
-│       └── preprocessing.py
+PySUS
 ```
 
-O sistema é estruturado em camadas científicas modulares:
+A consulta ao banco de dados hospitalares segue o fluxo:
 
-| Camada | Função |
-|------|------|
-| Camada de Dados | Ingestão de dados do SIH/SUS |
-| Camada de Sinais | Métricas estatísticas |
-| Camada de Complexidade | Entropia e análise fractal |
-| Camada Dinâmica | Reconstrução de potenciais |
-| Camada de Regimes | Detecção de estados com Bayesian/HMM |
-| Camada de Controle | Políticas com reinforcement learning |
-| Camada de Visualização | Dashboard Streamlit |
+1. Seleção de arquivos do DATASUS
+2. Download de arquivos `.dbc`
+3. Conversão para `DataFrame`
+4. Agregação temporal
+
+O resultado final é uma **série temporal epidemiológica**:
+
+$$
+x_t = \text{número de internações no tempo } t
+$$
+
+Essa série representa o **estado macroscópico do sistema de saúde**.
 
 ---
 
-# Estrutura Matemática
+# Camada 2 — Transformação do Sinal
 
-## Retornos Logarítmicos
-
-A principal transformação utilizada é o **retorno logarítmico**:
+Para analisar propriedades dinâmicas do sistema, a série é transformada em **retornos logarítmicos**:
 
 $$
 r_t = \log(x_t + \epsilon) - \log(x_{t-1} + \epsilon)
 $$
 
-onde \( \epsilon \) evita singularidades numéricas.
+Isso permite analisar:
+
+- flutuações relativas
+- propriedades estatísticas
+- comportamento estocástico
+
+Essa transformação é comum em:
+
+- física estatística
+- econofísica
+- teoria de sistemas complexos.
 
 ---
 
-# Métricas de Complexidade
+# Camada 3 — Sensores de Complexidade
 
-## 1. Detrended Fluctuation Analysis (DFA)
+A framework implementa um conjunto de **sensores matemáticos independentes**, cada um capturando um aspecto do comportamento sistêmico.
 
-Utilizada para estimar persistência fractal.
+Esses sensores incluem:
 
-Passos:
-
-1. Integração do sinal
-
-$$
-Y(k) = \sum_{i=1}^{k} (x_i - \bar{x})
-$$
-
-2. Divisão em janelas de tamanho \( n \)
-
-3. Cálculo da flutuação RMS
-
-$$
-F(n) = \sqrt{\frac{1}{N}\sum (Y - Y_{trend})^2}
-$$
-
-Lei de escala:
-
-$$
-F(n) \sim n^\alpha
-$$
-
-Interpretação:
-
-| Alpha | Interpretação |
+| Sensor | Fenômeno detectado |
 |------|------|
-| 0.5 | Aleatório |
-| >0.5 | Persistente |
-| <0.5 | Antipersistente |
+| Autocorrelação | Lentidão crítica |
+| Volatilidade | Instabilidade |
+| DFA | Memória fractal |
+| Lempel-Ziv | Complexidade estrutural |
+| Fisher | Ordem informacional |
+| Entropia | Desorganização |
+
+O objetivo é detectar **assinaturas universais de transição crítica**.
 
 ---
 
-## 2. Complexidade de Lempel-Ziv
+# Camada 4 — Termodinâmica do Sistema
 
-Mede complexidade algorítmica.
+Uma das ideias centrais da framework é modelar o sistema como um **processo estocástico em uma paisagem de potencial**.
 
-Para uma sequência binária \( S \):
-
-$$
-C_{LZ} = \frac{c(n)\log_2 n}{n}
-$$
-
-onde:
-
-- \( c(n) \) = número de subsequências únicas.
-
-Valores altos indicam **maior novidade estrutural**.
-
----
-
-## 3. Informação de Fisher
-
-Mede **ordem versus desordem** no sistema.
-
-Aproximação discreta:
-
-$$
-I = 4 \sum (\sqrt{p_{i+1}} - \sqrt{p_i})^2
-$$
-
-Interpretação:
-
-| Fisher | Significado |
-|------|------|
-| Alto | Sistema ordenado |
-| Baixo | Sistema desordenado |
-
----
-
-## 4. Entropia de Permutação
-
-Captura a estrutura temporal da série.
-
-$$
-H = - \sum p_i \log_2(p_i)
-$$
-
-Entropia normalizada:
-
-$$
-H_{norm} = \frac{H}{\log_2(d!)}
-$$
-
-onde:
-
-- \( d \) é a dimensão de embedding.
-
----
-
-## 5. Entropia Multiescala
-
-A entropia é calculada em múltiplas escalas temporais:
-
-$$
-y_j^{(\tau)} = \frac{1}{\tau}\sum_{i=(j-1)\tau+1}^{j\tau} x_i
-$$
-
-Depois calcula-se a entropia de \( y^{(\tau)} \).
-
-Isso revela **complexidade hierárquica**.
-
----
-
-# Reconstrução da Paisagem de Potencial
-
-Um dos diagnósticos mais importantes é a reconstrução do **potencial termodinâmico efetivo**.
-
-Dada uma densidade de probabilidade \( p(x) \):
-
-$$
-U(x) = -\frac{\sigma^2}{2} \log p(x)
-$$
-
-Interpretação:
-
-| Paisagem | Significado |
-|------|------|
-| Poço profundo | Sistema estável |
-| Poço raso | Perda de resiliência |
-| Bimodal | Transição de regime |
-
-Isso corresponde ao sistema estocástico:
+A dinâmica geral pode ser descrita como:
 
 $$
 \frac{dx}{dt} = -\nabla U(x) + \eta(t)
 $$
 
-onde \( \eta(t) \) representa ruído.
+onde:
+
+- \( U(x) \) é o potencial efetivo
+- \( \eta(t) \) representa ruído estocástico
+
+A paisagem de potencial é reconstruída empiricamente a partir da distribuição de probabilidades:
+
+$$
+U(x) = -\frac{\sigma^2}{2} \log p(x)
+$$
+
+Isso permite visualizar:
+
+- estabilidade do sistema
+- profundidade de atratores
+- presença de múltiplos regimes.
 
 ---
 
-# Índice de Resiliência
+# Camada 5 — Diagnóstico de Resiliência
 
-Um índice composto de resiliência é definido como:
+A framework calcula um **índice composto de resiliência sistêmica**.
 
 $$
 R = 1 - \frac{AC_1 + \alpha + V}{3}
@@ -293,35 +136,44 @@ $$
 
 onde:
 
-- \( AC_1 \) = autocorrelação lag-1
-- \( \alpha \) = expoente fractal
-- \( V \) = transformação da volatilidade
+- \( AC_1 \) mede lentidão crítica
+- \( \alpha \) mede persistência fractal
+- \( V \) mede volatilidade
 
-Interpretação:
+Esse índice representa a **capacidade do sistema de absorver perturbações**.
 
-| Resiliência | Significado |
+Interpretativamente:
+
+| Resiliência | Estado do sistema |
 |------|------|
-| >0.6 | Sistema estável |
-| 0.45–0.6 | Atenção |
-| <0.45 | Crítico |
+| Alta | Sistema estável |
+| Média | Sistema tensionado |
+| Baixa | Sistema próximo de transição crítica |
 
 ---
 
-# Reconstrução do Espaço de Fase
+# Camada 6 — Reconstrução do Espaço de Fase
 
-O sistema também visualiza **atratores de fase**.
+A framework também implementa **reconstrução de espaço de fase**, permitindo visualizar a dinâmica interna do sistema.
 
-Embedding:
+Um embedding simples pode ser representado por:
 
 $$
 X_t = (x_t, x_{t+\tau})
 $$
 
-Isso revela estruturas dinâmicas ocultas.
+Isso revela:
+
+- atratores
+- ciclos
+- caos determinístico
+- transições de regime.
 
 ---
 
-# Análise Espectral
+# Camada 7 — Análise Espectral
+
+A análise espectral permite identificar **estruturas temporais ocultas**.
 
 Usando o método de Welch:
 
@@ -329,49 +181,27 @@ $$
 S(f) = \frac{1}{N}\left|\sum x_t e^{-i2\pi ft}\right|^2
 $$
 
-O espectro revela:
+Isso permite detectar:
 
-- periodicidades
-- leis de escala
-- mudanças de regime
-
----
-
-# Controlador de Reinforcement Learning
-
-O projeto inclui um controlador experimental baseado em **QLearning**.
-
-Regra de atualização:
-
-$$
-Q(s,a) \leftarrow Q(s,a) + \alpha \left[r + \gamma \max Q(s',a') - Q(s,a)\right]
-$$
-
-Isso permite futuras pesquisas sobre **políticas adaptativas de intervenção**.
+- ciclos sazonais
+- escalas dominantes
+- comportamento \(1/f\).
 
 ---
 
-# Detecção Bayesiana de Regimes
+# Camada 8 — Detecção de Regimes
 
-Atualização de crença:
+A framework inclui dois mecanismos para inferir **regimes ocultos**.
 
-$$
-P(s|D) = \frac{P(D|s)P(s)}{\sum P(D|s_i)P(s_i)}
-$$
+### Hidden Markov Models
 
-Usada para inferir **regimes ocultos do sistema**.
-
----
-
-# Hidden Markov Models
-
-Transições de regime:
+Modelam o sistema como um processo de estados discretos:
 
 $$
 P(S_t | S_{t-1})
 $$
 
-com emissões gaussianas:
+com observações gaussianas:
 
 $$
 x_t \sim N(\mu_s, \Sigma_s)
@@ -379,158 +209,93 @@ $$
 
 ---
 
-# Dashboard Streamlit
+### Filtro Bayesiano
 
-A interface apresenta **16 painéis analíticos**:
+Atualiza probabilidades de regimes dinamicamente:
 
-| Painel | Métrica |
-|-----|-----|
-| 1 | Série temporal |
-| 2 | Monitor de resiliência |
-| 3 | Lentidão crítica |
-| 4 | DFA |
-| 5 | Informação de Fisher |
-| 6 | Complexidade LZ |
-| 7 | Poço de potencial |
-| 8 | Atrator de fase |
-| 9 | Espectro de potência |
-| 10 | PDF |
-| 11 | Assimetria |
-| 12 | Curtose |
-| 13 | Entropia multiescala |
-| 14 | Volatilidade |
-| 15 | Plano complexidade-ordem |
-| 16 | Resumo técnico |
+$$
+P(s|D) = \frac{P(D|s)P(s)}{\sum P(D|s_i)P(s_i)}
+$$
 
 ---
 
-# Fonte de Dados
+# Camada 9 — Controle Adaptativo
 
-O sistema utiliza a biblioteca:
+A framework inclui uma base experimental para **controle adaptativo baseado em aprendizado por reforço**.
 
-```
-PySUS
-```
+O algoritmo utilizado é **Q-Learning**.
 
-para acessar dados do:
+Atualização:
 
-```
-SIH/SUS
-```
+$$
+Q(s,a) \leftarrow Q(s,a) + \alpha \left[r + \gamma \max Q(s',a') - Q(s,a)\right]
+$$
 
-Parâmetros de consulta:
+Essa camada abre caminho para:
 
-- UF
-- Ano
-- Mês
-- Capítulo CID-10
-- Agregação temporal
+- políticas de intervenção
+- simulação de estratégias
+- otimização de decisões de saúde pública.
 
 ---
 
-# Instalação
+# Camada 10 — Visualização Científica
 
-```
-git clone https://github.com/your-repo/qwan-health-complexity
-cd qwan-health-complexity
-```
+Todos os sensores são integrados em um **mosaico diagnóstico de 16 painéis**.
 
-Instale as dependências:
+Essa visualização funciona como um **painel de instrumentação do sistema de saúde**, análogo a painéis usados em:
 
-```
-pip install -r requirements.txt
-```
+- engenharia de sistemas
+- monitoramento de redes
+- física experimental.
 
-Execute:
-
-```
-streamlit run app.py
-```
+Cada painel representa uma dimensão do comportamento do sistema.
 
 ---
 
-# Saída do Sistema
+# Filosofia da Framework
 
-O sistema gera um **mosaico diagnóstico** contendo:
+A framework é baseada na ideia de que **sistemas de saúde são sistemas adaptativos complexos**.
 
-- trajetórias de resiliência
-- escalas de entropia
-- diagnósticos espectrais
-- paisagens de potencial
-- atratores dinâmicos
+Portanto, seu comportamento não pode ser compreendido apenas por:
 
-Os gráficos são exportados automaticamente para:
+- médias
+- regressões lineares
+- indicadores isolados.
 
-```
-/plots
-```
+Em vez disso, é necessário observar:
 
-Formatos:
-
-- PNG
-- PDF
+- flutuações
+- padrões emergentes
+- estruturas dinâmicas
+- sinais precoces de instabilidade.
 
 ---
 
-# Direções Futuras de Pesquisa
+# Visão de Longo Prazo
 
-Possíveis extensões incluem:
+A framework pode evoluir para uma plataforma completa de:
 
-- Modelagem epidemiológica com Neural ODE
-- Pipelines de vigilância em tempo real
-- Políticas adaptativas com reinforcement learning
-- Previsão de regimes com métodos bayesianos
-- Integração com sistemas nacionais de monitoramento em saúde
+**Termodinâmica Computacional de Sistemas de Saúde**
 
----
+capaz de realizar:
 
-# Licença
-
-Licença MIT
-
-```
-Copyright (c) 2026 Lucas Amaral Dourado
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files to deal in the Software
-without restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies.
-```
+- vigilância epidemiológica de alta dimensão
+- previsão de crises hospitalares
+- monitoramento de resiliência do sistema
+- simulação de políticas públicas.
 
 ---
 
-# Autor
+# Síntese
 
-**Lucas Amaral Dourado**
+A framework **QWAN Ultra-Deep Health Complexity** combina:
 
-Áreas de pesquisa:
+- **física estatística**
+- **teoria da informação**
+- **aprendizado de máquina**
+- **epidemiologia computacional**
 
-- Sistemas Complexos
-- Saúde Computacional
-- Física Estatística
-- Dinâmica de Sistemas de Saúde
+para criar um novo paradigma de **monitoramento dinâmico de sistemas de saúde**, no exemplo de aplicação.
 
----
-
-# Citação
-
-Caso utilize este projeto em pesquisa:
-
-```
-Dourado, Lucas Amaral.
-QWAN Ultra-Deep Health Complexity:
-Sinais Termodinâmicos de Alerta Precoce em Sistemas de Saúde.
-2026.
-```
-
----
-
-# Observação Final
-
-Sistemas de saúde são **sistemas adaptativos complexos**.
-
-Compreendê-los exige ferramentas além da epidemiologia clássica.
-
-Este projeto busca trazer **física estatística e ciência da complexidade** para o **monitoramento de sistemas de saúde**, abrindo caminho para **governança antecipatória baseada em dados**.
-
----
+Seu objetivo é transformar **dados administrativos hospitalares** em **instrumentos científicos de diagnóstico sistêmico**.
