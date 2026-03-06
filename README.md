@@ -1,340 +1,404 @@
-# QWAN — Quality Wihtout a Name to Nonlinear Health Systems
+# MetastableX  
+### Ultra-Deep Health Complexity Monitoring
 
-![QWAN Framework Overview](Untitled2.jpeg)
+**MetastableX** é uma plataforma experimental de **vigilância epidemiológica baseada em física estatística**, teoria da informação e dinâmica não linear.  
 
-> Early Warning Signals of Systemic Instability in Hospitalization Dynamics  
-> A Non-Equilibrium Statistical Physics Framework Applied to SIH/SUS
+O sistema utiliza dados reais do **SIH/SUS** e aplica métodos de **análise de criticidade**, **complexidade estrutural** e **dinâmica de regimes** para detectar **sinais precoces de instabilidade em sistemas de saúde**.
 
----
+A plataforma integra:
 
-## Overview
-
-Article: https://goldenluke.github.io/qwan_zero_pipeline/index4.html
-
-QWAN is a theoretical and computational framework for detecting **critical transitions in health systems** using tools from:
-
-- Nonlinear dynamical systems
-- Stochastic differential equations
-- Statistical physics
-- Information theory
-- Algorithmic complexity
-
-The framework models hospitalization time series as **metastable stochastic systems** approaching bifurcation points, enabling early detection of systemic instability.
-
-The dashboard is merely a visualization layer.  
-The core contribution is the **mathematical and theoretical structure** described below.
+- Física de sistemas complexos  
+- Termodinâmica fora do equilíbrio  
+- Teoria da informação  
+- Dinâmica de séries temporais  
+- Inferência de regimes  
+- Controle adaptativo  
 
 ---
 
-# 1. System Ontology
+# Arquitetura do Projeto
 
-We model territorial hospitalization counts as a stochastic nonlinear process.
-
-### Discrete formulation
-
-\[
-X_{t+1} = f(X_t) + \epsilon_t
-\]
-
-### Continuous-time formulation (Langevin dynamics)
-
-\[
-dX = F(X,\theta)dt + \sigma dW_t
-\]
-
-Where:
-
-- \( X_t \) = hospitalization intensity
-- \( F(X,\theta) \) = structural system dynamics
-- \( \sigma dW_t \) = stochastic epidemiological noise
-- \( \theta \) = control parameters (seasonality, epidemics, infrastructure load)
-
-This places QWAN within:
-
-- Nonlinear dynamical systems theory
-- Stochastic processes
-- Metastable regime analysis
-
----
-
-# 2. Critical Transition Theory
-
-As the system approaches a bifurcation (e.g., fold bifurcation):
-
-\[
-\frac{dF}{dX} \to 0
-\]
-
-The dominant eigenvalue of the Jacobian approaches zero:
-
-\[
-\lambda_{max} \to 0^{-}
-\]
-
-Observable consequences:
-
-| Indicator | Behavior Near Critical Point |
-|-----------|------------------------------|
-| Autocorrelation (lag-1) | ↑ |
-| Variance | ↑ |
-| Recovery rate | ↓ |
-| Resilience | ↓ |
-
-This phenomenon is known as **Critical Slowing Down (CSD)**.
+```
+.
+├── app.py
+│
+├── metastablex
+│   ├── core
+│   │   ├── signals.py
+│   │   ├── potential.py
+│   │   └── instability.py
+│   │
+│   ├── regimes
+│   │   ├── bayesian.py
+│   │   └── hmm.py
+│   │
+│   ├── control
+│   │   └── rl.py
+│   │
+│   ├── dynamics
+│   │   └── neural_ode.py
+│   │
+│   └── utils
+│       └── preprocessing.py
+│
+└── plots
+```
 
 ---
 
-# 3. Effective Potential Reconstruction
+# Conceito Fundamental
 
-Assuming the Fokker–Planck equation governs the probability density evolution:
+Sistemas complexos apresentam mudanças abruptas quando se aproximam de **transições críticas**.
 
-\[
-\frac{\partial P}{\partial t}
-=
--\frac{\partial}{\partial x}(F(x)P)
+Em sistemas dinâmicos estocásticos, a evolução pode ser descrita por:
+
+$$
+\frac{dx}{dt} =
+- \nabla \Phi(x)
 +
-\frac{\sigma^2}{2}
-\frac{\partial^2 P}{\partial x^2}
-\]
+\eta(t)
+$$
 
-At stationary equilibrium:
+onde:
 
-\[
-P(x) \propto e^{-2U(x)/\sigma^2}
-\]
+- $x$ representa o estado do sistema
+- $\Phi(x)$ é um **potencial efetivo**
+- $\eta(t)$ representa ruído estocástico
 
-Thus, the effective potential can be reconstructed as:
-
-\[
-U(x) = -\frac{\sigma^2}{2} \log P(x)
-\]
-
-Interpretation:
-
-- Deep single well → stable regime
-- Shallow well → low resilience
-- Double well → multistability
-- Flattening landscape → approaching transition
-
-This is a direct application of **non-equilibrium statistical physics** to epidemiological dynamics.
+Essa formulação corresponde a uma **equação de Langevin**.
 
 ---
 
-# 4. Structural Complexity Metrics
+# Reconstrução de Potencial
 
-QWAN integrates multiple structural measures.
+A paisagem de energia é reconstruída a partir da distribuição empírica das variações da série temporal.
 
----
+Se $p(x)$ é a densidade de probabilidade:
 
-## 4.1 Detrended Fluctuation Analysis (DFA)
+$$
+U(x) =
+- \frac{\sigma^2}{2} \ln p(x)
+$$
 
-Measures long-range temporal correlations.
+onde:
 
-- α = 0.5 → white noise
-- α > 0.5 → persistent dynamics
-- α < 0.5 → antipersistent
+- $U(x)$ é o **potencial estocástico**
+- $\sigma^2$ é a variância do processo
 
-Relation to power spectrum:
-
-\[
-S(f) \sim f^{-\beta}
-\quad \text{where} \quad
-\beta = 2\alpha - 1
-\]
+Vales profundos indicam **estabilidade estrutural**, enquanto vales rasos indicam **metaestabilidade**.
 
 ---
 
-## 4.2 Lempel–Ziv Complexity
+# Sensores de Complexidade
 
-Approximates algorithmic complexity:
+O sistema calcula múltiplos indicadores derivados de física estatística e teoria da informação.
 
-\[
-C_{LZ} \sim \frac{c(n)\log n}{n}
-\]
+## Memória Fractal
 
-Detects structural novelty and emergent patterns.
+A memória de longo alcance é estimada via **Detrended Fluctuation Analysis**:
 
----
+$$
+F(n) \sim n^{\alpha}
+$$
 
-## 4.3 Fisher Information
+onde:
 
-\[
-I = \int \frac{(\partial_x p)^2}{p} dx
-\]
-
-High Fisher → ordered system  
-Low Fisher → structural degradation  
-
-Fisher Information often decreases near regime shifts.
+- $\alpha < 0.5$ → antipersistência  
+- $\alpha = 0.5$ → ruído branco  
+- $\alpha > 0.5$ → persistência estrutural  
 
 ---
 
-## 4.4 Multiscale Entropy
+## Informação de Fisher
 
-Captures structural complexity across temporal scales:
+A informação estrutural é definida como:
 
-\[
-MSE(s) = H(\text{coarse-grained signal at scale } s)
-\]
-
-Loss of multiscale entropy coherence may signal systemic degradation.
-
----
-
-# 5. Resilience Definition
-
-We define instantaneous systemic resilience as:
-
-\[
-\mathcal{R}_t =
-1 -
+$$
+I =
+4 \sum_i
 \left(
-w_1 AC1_t +
-w_2 \alpha_t +
-w_3 \tilde{\sigma}_t
-\right)
-\]
+\nabla \sqrt{p_i}
+\right)^2
+$$
 
-Where:
-
-- \( AC1_t \) = lag-1 autocorrelation
-- \( \alpha_t \) = DFA exponent
-- \( \tilde{\sigma}_t \) = normalized volatility
-- \( w_i \) = weighting coefficients
-
-Resilience declines as the system approaches a critical threshold.
+Valores elevados indicam **ordem estrutural elevada**.
 
 ---
 
-# 6. QWAN Structural Instability Index
+## Complexidade Lempel–Ziv
 
-We define a composite instability index:
+A complexidade algorítmica é estimada pela compressibilidade da série:
 
-\[
-\mathcal{QWAN}_t =
-z(AC1_t)
+$$
+C_{LZ} =
+\frac{c(n)\log_2 n}{n}
+$$
+
+onde $c(n)$ representa o número de padrões distintos detectados.
+
+---
+
+## Entropia por Permutação
+
+A entropia ordinal mede complexidade dinâmica:
+
+$$
+H =
+-\sum p_i \log(p_i)
+$$
+
+normalizada por:
+
+$$
+H_{norm} =
+\frac{H}{\log(d!)}
+$$
+
+---
+
+# Detecção de Critical Slowing Down
+
+Antes de colapsos sistêmicos, sistemas complexos exibem **lentidão crítica**.
+
+Esse fenômeno é detectado via aumento da autocorrelação:
+
+$$
+AC_1 =
+\text{corr}(x_t, x_{t-1})
+$$
+
+Quando:
+
+$$
+AC_1 \rightarrow 1
+$$
+
+o sistema aproxima-se de uma **bifurcação dinâmica**.
+
+---
+
+# Índice de Resiliência Sistêmica
+
+A plataforma sintetiza múltiplos indicadores em um índice composto:
+
+$$
+R =
+1 -
+\frac{
+AC_1 +
+\alpha +
+\log_{10}(\sigma^2)
+}{3}
+$$
+
+onde:
+
+- $AC_1$ → autocorrelação  
+- $\alpha$ → memória fractal  
+- $\sigma^2$ → volatilidade  
+
+Valores baixos de $R$ indicam **perda de resiliência sistêmica**.
+
+---
+
+# Pipeline Analítico
+
+```
+Dados SIH/SUS
+     │
+     ▼
+Série temporal de internações
+     │
+     ▼
+Transformação log-retornos
+     │
+     ▼
+Sensores de complexidade
+     │
+     ▼
+Reconstrução de potencial
+     │
+     ▼
+Detecção de regimes
+     │
+     ▼
+Diagnóstico estrutural
+```
+
+---
+
+# Diagnóstico de 16 Sensores
+
+O dashboard produz um **mosaico analítico completo**:
+
+1. Série temporal bruta  
+2. Índice de resiliência  
+3. Autocorrelação (critical slowing down)  
+4. Memória fractal (DFA)  
+5. Informação de Fisher  
+6. Complexidade Lempel-Ziv  
+7. Potencial estocástico  
+8. Atrator de fase  
+9. Espectro de potência  
+10. Distribuição de retornos  
+11. Assimetria  
+12. Curtose  
+13. Entropia multiescala  
+14. Volatilidade  
+15. Plano complexidade-ordem  
+16. Diagnóstico sistêmico  
+
+---
+
+# Inferência de Regimes
+
+A biblioteca inclui métodos para detecção de regimes dinâmicos.
+
+### Hidden Markov Models
+
+$$
+P(S_t|X_t)
+$$
+
+onde $S_t$ representa estados latentes.
+
+Implementação:
+
+```
+metastablex/regimes/hmm.py
+```
+
+---
+
+### Filtro Bayesiano
+
+A atualização da crença segue:
+
+$$
+P(S_t|X_t) =
+\frac{
+P(X_t|S_t) P(S_t)
+}{
+\sum_i P(X_t|S_i)P(S_i)
+}
+$$
+
+Implementado em:
+
+```
+metastablex/regimes/bayesian.py
+```
+
+---
+
+# Controle Adaptativo
+
+O sistema inclui um controlador de **aprendizado por reforço**.
+
+Função de atualização Q-Learning:
+
+$$
+Q(s,a)
+\leftarrow
+Q(s,a)
 +
-z(\alpha_t)
-+
-z(LZ_t)
+\alpha
+\left[
+r +
+\gamma
+\max_a Q(s',a)
 -
-z(Fisher_t)
-\]
+Q(s,a)
+\right]
+$$
 
-Where:
+Implementado em:
 
-- \( z(\cdot) \) denotes standardized values.
-
-Interpretation:
-
-- High QWAN → structural instability
-- Moderate QWAN → metastable regime
-- Low QWAN → stable configuration
+```
+metastablex/control/rl.py
+```
 
 ---
 
-# 7. Regime Interpretation
+# Interface Interativa
 
-QWAN operates under a metastable systems perspective:
+A aplicação é construída com **Streamlit**.
 
-| Regime | Characteristics |
-|--------|-----------------|
-| Stable | Deep potential well, low AC1 |
-| Metastable | Flattening potential, increasing memory |
-| Critical | High AC1, rising variance |
-| Post-transition | New attractor state |
+```
+streamlit run app.py
+```
 
-This connects directly to:
+A interface permite:
 
-- Fold bifurcations
-- Saddle-node transitions
-- Non-equilibrium phase transitions
+- seleção de estado (UF)
+- filtragem por capítulo CID
+- agregação temporal
+- controle da janela de análise
 
 ---
 
-# 8. Application to SIH/SUS
+# Fonte de Dados
 
-Hospitalizations are treated as:
+Dados hospitalares são obtidos via:
 
-\[
-X(t) = \text{territorial hospitalization flux}
-\]
+```
+PySUS
+```
 
-Possible applications:
+Fonte:
 
-- Early detection of hospital overload
-- Monitoring respiratory outbreaks (CID J)
-- Detecting systemic stress before peak incidence
-- Identifying territorial fragility
+**SIH/SUS — Sistema de Informações Hospitalares**
 
 ---
 
-# 9. Validation Roadmap
+# Instalação
 
-To elevate QWAN to publication-level rigor:
-
-1. Historical backtesting (e.g., COVID waves)
-2. ROC analysis (predictive performance)
-3. Sensitivity/specificity evaluation
-4. Comparison with:
-   - Moving averages
-   - ARIMA
-   - Prophet
-5. Regime detection via HMM
+```
+pip install streamlit numpy pandas scipy matplotlib pysus hmmlearn
+```
 
 ---
 
-# 10. Theoretical Positioning
+# Execução
 
-QWAN integrates:
-
-- Critical Transition Theory (Scheffer, Dakos)
-- Langevin & Fokker–Planck formalism
-- Information theory in dynamical systems
-- Algorithmic complexity theory
-- Non-equilibrium thermodynamics
-
-It proposes a unified lens for **systemic health stability analysis**.
+```
+streamlit run app.py
+```
 
 ---
 
-# 11. Conceptual Contribution
+# Motivação Científica
 
-QWAN reframes hospital systems as:
+A plataforma investiga a hipótese:
 
-> Nonlinear stochastic dynamical systems exhibiting metastability and regime shifts.
+> Sistemas complexos de saúde apresentam sinais detectáveis de instabilidade antes de colapsos epidemiológicos.
 
-Rather than reactive epidemiological monitoring, it enables:
+Inspirada em:
 
-- Structural diagnostics
-- Early instability detection
-- Dynamical resilience quantification
-
----
-
-# 12. Future Directions
-
-- Bayesian regime filtering
-- Hidden Markov regime classification
-- Reinforcement learning for adaptive intervention modeling
-- Spatial QWAN mapping
-- Multi-variable coupling (admissions, ICU occupancy, mortality)
+- Critical Transitions in Nature and Society  
+- Statistical Physics of Complex Systems  
+- Early Warning Signals for Critical Transitions  
 
 ---
 
-# Citation
+# Status do Projeto
 
-If using this framework, cite as:
-
-Dourado, L. (2026).  
-**QWAN: A Non-Equilibrium Statistical Physics Framework for Early Warning Detection in Health Systems.**
-
----
-
-# License
-
-MIT
+```
+Research Prototype
+Active Development
+Experimental Methods
+```
 
 ---
 
-> QWAN treats health systems not as static datasets, but as living dynamical structures evolving under stochastic forces.
+# Licença
+
+MIT License
+
+@ Autor
+Lucas Amaral Dourado
+
+```
+MetastableX
+Computational Epidemiology Lab
+```
