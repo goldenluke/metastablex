@@ -1,365 +1,447 @@
-# MetastableX  
-### Ultra-Deep Health Complexity Monitoring
+# 🔬 QWAN Ultra-Deep Health Complexity
+### Sistema Termodinâmico de Alerta Precoce para Instabilidade em Sistemas de Saúde
 
-**MetastableX** é uma plataforma experimental de **vigilância epidemiológica baseada em física estatística**, teoria da informação e dinâmica não linear.  
-
-O sistema utiliza dados reais do **SIH/SUS** e aplica métodos de **análise de criticidade**, **complexidade estrutural** e **dinâmica de regimes** para detectar **sinais precoces de instabilidade em sistemas de saúde**.
-
-A plataforma integra:
-
-- Física de sistemas complexos  
-- Termodinâmica fora do equilíbrio  
-- Teoria da informação  
-- Dinâmica de séries temporais  
-- Inferência de regimes  
-- Controle adaptativo  
+**Autor:** Lucas Amaral Dourado  
+**Licença:** MIT  
 
 ---
 
-# Arquitetura do Projeto
+# Visão Geral
+
+**QWAN Ultra-Deep Health Complexity** é uma plataforma científica experimental que aplica **física estatística, dinâmica não-linear, teoria da informação e ciência de sistemas complexos** à **vigilância em saúde pública**.
+
+O sistema consome dados de internações hospitalares do **SIH/SUS** e executa **diagnósticos multicamadas de complexidade**, capazes de identificar **sinais precoces de instabilidade sistêmica**, incluindo:
+
+- Lentidão crítica (critical slowing down)
+- Perda de resiliência
+- Persistência fractal
+- Transições entrópicas
+- Deformação da paisagem de potencial
+
+O projeto integra:
+
+- **Dashboards interativos em Streamlit**
+- **Métricas de teoria da complexidade**
+- **Reconstrução de potenciais termodinâmicos**
+- **Processamento de sinais**
+- **Detecção de regimes com aprendizado de máquina**
+
+O resultado é um **sistema de diagnóstico estrutural em 16 pontos** projetado para monitorar **metastabilidade em sistemas de saúde**.
+
+---
+
+# Motivação Científica
+
+Sistemas complexos próximos de **transições críticas** frequentemente exibem **assinaturas estatísticas universais** antes de colapsos.
+
+Se representarmos o estado do sistema por uma série temporal:
+
+$$
+x_t
+$$
+
+À medida que o sistema se aproxima de uma transição crítica, vários indicadores mudam sistematicamente.
+
+---
+
+### Lentidão Crítica
+
+A autocorrelação cresce:
+
+$$
+AC(1) \rightarrow 1
+$$
+
+porque o sistema demora mais para retornar ao equilíbrio após perturbações.
+
+---
+
+### Aumento da Variância
+
+A variância aumenta porque o sistema passa a explorar uma região maior do espaço de estados:
+
+$$
+\sigma^2 = Var(x_t)
+$$
+
+---
+
+### Memória Fractal
+
+Correlação de longo alcance emerge:
+
+$$
+F(s) \sim s^\alpha
+$$
+
+onde:
+
+- \( \alpha > 0.5 \) indica persistência
+- \( \alpha < 0.5 \) indica antipersistência
+
+---
+
+### Colapso Entrópico
+
+Métricas de complexidade como entropia podem diminuir à medida que o sistema se aproxima de estados altamente estruturados ou colapsos organizacionais.
+
+---
+
+O projeto operacionaliza esses princípios em um **motor de sensores de complexidade**.
+
+---
+
+# Arquitetura
 
 ```
-.
+project/
+│
 ├── app.py
 │
-├── metastablex
-│   ├── core
+├── metastablex/
+│   ├── core/
 │   │   ├── signals.py
 │   │   ├── potential.py
 │   │   └── instability.py
 │   │
-│   ├── regimes
-│   │   ├── bayesian.py
-│   │   └── hmm.py
+│   ├── regimes/
+│   │   ├── hmm.py
+│   │   └── bayesian.py
 │   │
-│   ├── control
-│   │   └── rl.py
-│   │
-│   ├── dynamics
+│   ├── dynamics/
 │   │   └── neural_ode.py
 │   │
-│   └── utils
+│   ├── control/
+│   │   └── rl.py
+│   │
+│   └── utils/
 │       └── preprocessing.py
-│
-└── plots
 ```
+
+O sistema é estruturado em camadas científicas modulares:
+
+| Camada | Função |
+|------|------|
+| Camada de Dados | Ingestão de dados do SIH/SUS |
+| Camada de Sinais | Métricas estatísticas |
+| Camada de Complexidade | Entropia e análise fractal |
+| Camada Dinâmica | Reconstrução de potenciais |
+| Camada de Regimes | Detecção de estados com Bayesian/HMM |
+| Camada de Controle | Políticas com reinforcement learning |
+| Camada de Visualização | Dashboard Streamlit |
 
 ---
 
-# Conceito Fundamental
+# Estrutura Matemática
 
-Sistemas complexos apresentam mudanças abruptas quando se aproximam de **transições críticas**.
+## Retornos Logarítmicos
 
-Em sistemas dinâmicos estocásticos, a evolução pode ser descrita por:
+A principal transformação utilizada é o **retorno logarítmico**:
 
 $$
-\frac{dx}{dt} =
-- \nabla \Phi(x)
-+
-\eta(t)
+r_t = \log(x_t + \epsilon) - \log(x_{t-1} + \epsilon)
+$$
+
+onde \( \epsilon \) evita singularidades numéricas.
+
+---
+
+# Métricas de Complexidade
+
+## 1. Detrended Fluctuation Analysis (DFA)
+
+Utilizada para estimar persistência fractal.
+
+Passos:
+
+1. Integração do sinal
+
+$$
+Y(k) = \sum_{i=1}^{k} (x_i - \bar{x})
+$$
+
+2. Divisão em janelas de tamanho \( n \)
+
+3. Cálculo da flutuação RMS
+
+$$
+F(n) = \sqrt{\frac{1}{N}\sum (Y - Y_{trend})^2}
+$$
+
+Lei de escala:
+
+$$
+F(n) \sim n^\alpha
+$$
+
+Interpretação:
+
+| Alpha | Interpretação |
+|------|------|
+| 0.5 | Aleatório |
+| >0.5 | Persistente |
+| <0.5 | Antipersistente |
+
+---
+
+## 2. Complexidade de Lempel-Ziv
+
+Mede complexidade algorítmica.
+
+Para uma sequência binária \( S \):
+
+$$
+C_{LZ} = \frac{c(n)\log_2 n}{n}
 $$
 
 onde:
 
-- $x$ representa o estado do sistema
-- $\Phi(x)$ é um **potencial efetivo**
-- $\eta(t)$ representa ruído estocástico
+- \( c(n) \) = número de subsequências únicas.
 
-Essa formulação corresponde a uma **equação de Langevin**.
+Valores altos indicam **maior novidade estrutural**.
 
 ---
 
-# Reconstrução de Potencial
+## 3. Informação de Fisher
 
-A paisagem de energia é reconstruída a partir da distribuição empírica das variações da série temporal.
+Mede **ordem versus desordem** no sistema.
 
-Se $p(x)$ é a densidade de probabilidade:
+Aproximação discreta:
 
 $$
-U(x) =
-- \frac{\sigma^2}{2} \ln p(x)
+I = 4 \sum (\sqrt{p_{i+1}} - \sqrt{p_i})^2
+$$
+
+Interpretação:
+
+| Fisher | Significado |
+|------|------|
+| Alto | Sistema ordenado |
+| Baixo | Sistema desordenado |
+
+---
+
+## 4. Entropia de Permutação
+
+Captura a estrutura temporal da série.
+
+$$
+H = - \sum p_i \log_2(p_i)
+$$
+
+Entropia normalizada:
+
+$$
+H_{norm} = \frac{H}{\log_2(d!)}
 $$
 
 onde:
 
-- $U(x)$ é o **potencial estocástico**
-- $\sigma^2$ é a variância do processo
-
-Vales profundos indicam **estabilidade estrutural**, enquanto vales rasos indicam **metaestabilidade**.
+- \( d \) é a dimensão de embedding.
 
 ---
 
-# Sensores de Complexidade
+## 5. Entropia Multiescala
 
-O sistema calcula múltiplos indicadores derivados de física estatística e teoria da informação.
-
-## Memória Fractal
-
-A memória de longo alcance é estimada via **Detrended Fluctuation Analysis**:
+A entropia é calculada em múltiplas escalas temporais:
 
 $$
-F(n) \sim n^{\alpha}
+y_j^{(\tau)} = \frac{1}{\tau}\sum_{i=(j-1)\tau+1}^{j\tau} x_i
+$$
+
+Depois calcula-se a entropia de \( y^{(\tau)} \).
+
+Isso revela **complexidade hierárquica**.
+
+---
+
+# Reconstrução da Paisagem de Potencial
+
+Um dos diagnósticos mais importantes é a reconstrução do **potencial termodinâmico efetivo**.
+
+Dada uma densidade de probabilidade \( p(x) \):
+
+$$
+U(x) = -\frac{\sigma^2}{2} \log p(x)
+$$
+
+Interpretação:
+
+| Paisagem | Significado |
+|------|------|
+| Poço profundo | Sistema estável |
+| Poço raso | Perda de resiliência |
+| Bimodal | Transição de regime |
+
+Isso corresponde ao sistema estocástico:
+
+$$
+\frac{dx}{dt} = -\nabla U(x) + \eta(t)
+$$
+
+onde \( \eta(t) \) representa ruído.
+
+---
+
+# Índice de Resiliência
+
+Um índice composto de resiliência é definido como:
+
+$$
+R = 1 - \frac{AC_1 + \alpha + V}{3}
 $$
 
 onde:
 
-- $\alpha < 0.5$ → antipersistência  
-- $\alpha = 0.5$ → ruído branco  
-- $\alpha > 0.5$ → persistência estrutural  
+- \( AC_1 \) = autocorrelação lag-1
+- \( \alpha \) = expoente fractal
+- \( V \) = transformação da volatilidade
+
+Interpretação:
+
+| Resiliência | Significado |
+|------|------|
+| >0.6 | Sistema estável |
+| 0.45–0.6 | Atenção |
+| <0.45 | Crítico |
 
 ---
 
-## Informação de Fisher
+# Reconstrução do Espaço de Fase
 
-A informação estrutural é definida como:
+O sistema também visualiza **atratores de fase**.
+
+Embedding:
 
 $$
-I =
-4 \sum_i
-\left(
-\nabla \sqrt{p_i}
-\right)^2
+X_t = (x_t, x_{t+\tau})
 $$
 
-Valores elevados indicam **ordem estrutural elevada**.
+Isso revela estruturas dinâmicas ocultas.
 
 ---
 
-## Complexidade Lempel–Ziv
+# Análise Espectral
 
-A complexidade algorítmica é estimada pela compressibilidade da série:
+Usando o método de Welch:
 
 $$
-C_{LZ} =
-\frac{c(n)\log_2 n}{n}
+S(f) = \frac{1}{N}\left|\sum x_t e^{-i2\pi ft}\right|^2
 $$
 
-onde $c(n)$ representa o número de padrões distintos detectados.
+O espectro revela:
+
+- periodicidades
+- leis de escala
+- mudanças de regime
 
 ---
 
-## Entropia por Permutação
+# Controlador de Reinforcement Learning
 
-A entropia ordinal mede complexidade dinâmica:
+O projeto inclui um controlador experimental baseado em **QLearning**.
 
-$$
-H =
--\sum p_i \log(p_i)
-$$
-
-normalizada por:
+Regra de atualização:
 
 $$
-H_{norm} =
-\frac{H}{\log(d!)}
+Q(s,a) \leftarrow Q(s,a) + \alpha \left[r + \gamma \max Q(s',a') - Q(s,a)\right]
+$$
+
+Isso permite futuras pesquisas sobre **políticas adaptativas de intervenção**.
+
+---
+
+# Detecção Bayesiana de Regimes
+
+Atualização de crença:
+
+$$
+P(s|D) = \frac{P(D|s)P(s)}{\sum P(D|s_i)P(s_i)}
+$$
+
+Usada para inferir **regimes ocultos do sistema**.
+
+---
+
+# Hidden Markov Models
+
+Transições de regime:
+
+$$
+P(S_t | S_{t-1})
+$$
+
+com emissões gaussianas:
+
+$$
+x_t \sim N(\mu_s, \Sigma_s)
 $$
 
 ---
 
-# Detecção de Critical Slowing Down
+# Dashboard Streamlit
 
-Antes de colapsos sistêmicos, sistemas complexos exibem **lentidão crítica**.
+A interface apresenta **16 painéis analíticos**:
 
-Esse fenômeno é detectado via aumento da autocorrelação:
-
-$$
-AC_1 =
-\text{corr}(x_t, x_{t-1})
-$$
-
-Quando:
-
-$$
-AC_1 \rightarrow 1
-$$
-
-o sistema aproxima-se de uma **bifurcação dinâmica**.
-
----
-
-# Índice de Resiliência Sistêmica
-
-A plataforma sintetiza múltiplos indicadores em um índice composto:
-
-$$
-R =
-1 -
-\frac{
-AC_1 +
-\alpha +
-\log_{10}(\sigma^2)
-}{3}
-$$
-
-onde:
-
-- $AC_1$ → autocorrelação  
-- $\alpha$ → memória fractal  
-- $\sigma^2$ → volatilidade  
-
-Valores baixos de $R$ indicam **perda de resiliência sistêmica**.
-
----
-
-# Pipeline Analítico
-
-```
-Dados SIH/SUS
-     │
-     ▼
-Série temporal de internações
-     │
-     ▼
-Transformação log-retornos
-     │
-     ▼
-Sensores de complexidade
-     │
-     ▼
-Reconstrução de potencial
-     │
-     ▼
-Detecção de regimes
-     │
-     ▼
-Diagnóstico estrutural
-```
-
----
-
-# Diagnóstico de 16 Sensores
-
-O dashboard produz um **mosaico analítico completo**:
-
-1. Série temporal bruta  
-2. Índice de resiliência  
-3. Autocorrelação (critical slowing down)  
-4. Memória fractal (DFA)  
-5. Informação de Fisher  
-6. Complexidade Lempel-Ziv  
-7. Potencial estocástico  
-8. Atrator de fase  
-9. Espectro de potência  
-10. Distribuição de retornos  
-11. Assimetria  
-12. Curtose  
-13. Entropia multiescala  
-14. Volatilidade  
-15. Plano complexidade-ordem  
-16. Diagnóstico sistêmico  
-
----
-
-# Inferência de Regimes
-
-A biblioteca inclui métodos para detecção de regimes dinâmicos.
-
-### Hidden Markov Models
-
-$$
-P(S_t|X_t)
-$$
-
-onde $S_t$ representa estados latentes.
-
-Implementação:
-
-```
-metastablex/regimes/hmm.py
-```
-
----
-
-### Filtro Bayesiano
-
-A atualização da crença segue:
-
-$$
-P(S_t|X_t) =
-\frac{
-P(X_t|S_t) P(S_t)
-}{
-\sum_i P(X_t|S_i)P(S_i)
-}
-$$
-
-Implementado em:
-
-```
-metastablex/regimes/bayesian.py
-```
-
----
-
-# Controle Adaptativo
-
-O sistema inclui um controlador de **aprendizado por reforço**.
-
-Função de atualização Q-Learning:
-
-$$
-Q(s,a)
-\leftarrow
-Q(s,a)
-+
-\alpha
-\left[
-r +
-\gamma
-\max_a Q(s',a)
--
-Q(s,a)
-\right]
-$$
-
-Implementado em:
-
-```
-metastablex/control/rl.py
-```
-
----
-
-# Interface Interativa
-
-A aplicação é construída com **Streamlit**.
-
-```
-streamlit run app.py
-```
-
-A interface permite:
-
-- seleção de estado (UF)
-- filtragem por capítulo CID
-- agregação temporal
-- controle da janela de análise
+| Painel | Métrica |
+|-----|-----|
+| 1 | Série temporal |
+| 2 | Monitor de resiliência |
+| 3 | Lentidão crítica |
+| 4 | DFA |
+| 5 | Informação de Fisher |
+| 6 | Complexidade LZ |
+| 7 | Poço de potencial |
+| 8 | Atrator de fase |
+| 9 | Espectro de potência |
+| 10 | PDF |
+| 11 | Assimetria |
+| 12 | Curtose |
+| 13 | Entropia multiescala |
+| 14 | Volatilidade |
+| 15 | Plano complexidade-ordem |
+| 16 | Resumo técnico |
 
 ---
 
 # Fonte de Dados
 
-Dados hospitalares são obtidos via:
+O sistema utiliza a biblioteca:
 
 ```
 PySUS
 ```
 
-Fonte:
+para acessar dados do:
 
-**SIH/SUS — Sistema de Informações Hospitalares**
+```
+SIH/SUS
+```
+
+Parâmetros de consulta:
+
+- UF
+- Ano
+- Mês
+- Capítulo CID-10
+- Agregação temporal
 
 ---
 
 # Instalação
 
 ```
-pip install streamlit numpy pandas scipy matplotlib pysus hmmlearn
+git clone https://github.com/your-repo/qwan-health-complexity
+cd qwan-health-complexity
 ```
 
----
+Instale as dependências:
 
-# Execução
+```
+pip install -r requirements.txt
+```
+
+Execute:
 
 ```
 streamlit run app.py
@@ -367,38 +449,88 @@ streamlit run app.py
 
 ---
 
-# Motivação Científica
+# Saída do Sistema
 
-A plataforma investiga a hipótese:
+O sistema gera um **mosaico diagnóstico** contendo:
 
-> Sistemas complexos de saúde apresentam sinais detectáveis de instabilidade antes de colapsos epidemiológicos.
+- trajetórias de resiliência
+- escalas de entropia
+- diagnósticos espectrais
+- paisagens de potencial
+- atratores dinâmicos
 
-Inspirada em:
+Os gráficos são exportados automaticamente para:
 
-- Critical Transitions in Nature and Society  
-- Statistical Physics of Complex Systems  
-- Early Warning Signals for Critical Transitions  
+```
+/plots
+```
+
+Formatos:
+
+- PNG
+- PDF
 
 ---
 
-# Status do Projeto
+# Direções Futuras de Pesquisa
 
-```
-Research Prototype
-Active Development
-Experimental Methods
-```
+Possíveis extensões incluem:
+
+- Modelagem epidemiológica com Neural ODE
+- Pipelines de vigilância em tempo real
+- Políticas adaptativas com reinforcement learning
+- Previsão de regimes com métodos bayesianos
+- Integração com sistemas nacionais de monitoramento em saúde
 
 ---
 
 # Licença
 
-MIT License
-
-@ Autor
-Lucas Amaral Dourado
+Licença MIT
 
 ```
-MetastableX
-Computational Epidemiology Lab
+Copyright (c) 2026 Lucas Amaral Dourado
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files to deal in the Software
+without restriction, including without limitation the rights to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies.
 ```
+
+---
+
+# Autor
+
+**Lucas Amaral Dourado**
+
+Áreas de pesquisa:
+
+- Sistemas Complexos
+- Saúde Computacional
+- Física Estatística
+- Dinâmica de Sistemas de Saúde
+
+---
+
+# Citação
+
+Caso utilize este projeto em pesquisa:
+
+```
+Dourado, Lucas Amaral.
+QWAN Ultra-Deep Health Complexity:
+Sinais Termodinâmicos de Alerta Precoce em Sistemas de Saúde.
+2026.
+```
+
+---
+
+# Observação Final
+
+Sistemas de saúde são **sistemas adaptativos complexos**.
+
+Compreendê-los exige ferramentas além da epidemiologia clássica.
+
+Este projeto busca trazer **física estatística e ciência da complexidade** para o **monitoramento de sistemas de saúde**, abrindo caminho para **governança antecipatória baseada em dados**.
+
+---
