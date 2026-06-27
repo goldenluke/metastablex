@@ -39,7 +39,6 @@ The framework integrates:
 - geometry (fractal dimension, interface roughness)
 - machine learning (LSTM, clustering)
 - epidemiology (DATASUS / SIH-SUS)
-- AI interpretation (LLMs)
 
 ---
 
@@ -269,15 +268,6 @@ S \rightarrow I \rightarrow R
 $$
 
 Combined with ML for prediction and anomaly detection.
-
----
-
-# 🤖 7. AI Interpretation Layer
-
-## Local LLM (Ollama / Llama3)
-
-- offline execution
-- no external API
 
 ---
 
