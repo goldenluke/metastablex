@@ -6,7 +6,7 @@ A research-grade framework to simulate, measure, and interpret metastable dynami
 </p>
 
 <p align="center">
-⚙️ PyTorch • 📊 Time-Series • 🧠 Complex Systems • 🌊 Nonlinear Dynamics • 📐 Fractals • 🏥 Public Health • 🤖 AI
+⚙️ PyTorch • 📊 Time-Series • 🧠 Complex Systems • 🌊 Nonlinear Dynamics • 📐 Fractals • 🏥 Public Health 
 </p>
 
 ---
