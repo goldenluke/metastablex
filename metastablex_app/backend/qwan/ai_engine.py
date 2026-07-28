@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn.cluster import KMeans
 
 def cluster_states(data, k=3):

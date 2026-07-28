@@ -1,30 +1,35 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
-def plot_rg_flow(flow):
 
-    C = flow[:,0]
-    S = flow[:,1]
-    E = flow[:,2]
+def plot_rg_flow(trajectory):
+    """
+    Desenha o diagrama de fluxo do grupo de renormalização: a
+    trajetória das constantes de acoplamento efetivas (rho, g) no
+    espaço de acoplamentos, à medida que a série é sucessivamente
+    renormalizada (coarse-grained). O ponto fixo, se atingido, é
+    destacado.
 
-    dC = flow[:,3]
-    dS = flow[:,4]
-    dE = flow[:,5]
+    `trajectory` é a lista de dicts retornada por
+    metastablex.rg.flow.rg_flow / RegimeRG.flow.
+    """
 
-    fig = plt.figure(figsize=(8,7))
-    ax = fig.add_subplot(111, projection="3d")
+    rho = [point["rho"] for point in trajectory]
+    g = [point["g"] for point in trajectory]
+    scales = [point["scale"] for point in trajectory]
 
-    ax.quiver(
-        C,S,E,
-        dC,dS,dE,
-        length=0.1,
-        normalize=True
-    )
+    fig, ax = plt.subplots(figsize=(7, 6))
 
-    ax.set_xlabel("Complexity")
-    ax.set_ylabel("Stability")
-    ax.set_zlabel("Energy")
+    ax.plot(rho, g, marker="o", linestyle="-", color="steelblue")
 
+    for r, gg, scale in zip(rho, g, scales):
+        ax.annotate(f"b={scale}", (r, gg), textcoords="offset points", xytext=(6, 6))
+
+    if trajectory[-1].get("fixed_point"):
+        ax.scatter([rho[-1]], [g[-1]], color="crimson", zorder=5, label="ponto fixo")
+        ax.legend()
+
+    ax.set_xlabel("rho (acoplamento de correlação)")
+    ax.set_ylabel("g (energia residual)")
     ax.set_title("Regime RG Flow")
 
     plt.show()

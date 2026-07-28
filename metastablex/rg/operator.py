@@ -1,29 +1,25 @@
-import numpy as np
-from metastablex.tensor.regime_tensor import build_regime_tensor
+from metastablex.rg.flow import rg_flow
+
 
 class RegimeRG:
+    """
+    Operador de renormalização em espaço real: aplica repetidamente
+    a transformação de coarse-graining R_b (fator de bloco `b`) e
+    rastreia o fluxo das constantes de acoplamento efetivas (rho, g)
+    até um ponto fixo ou até esgotar `max_iterations`.
 
-    def __init__(self, scales):
+    Ver metastablex.rg.flow.rg_flow para a transformação em si.
+    """
 
-        self.scales = scales
+    def __init__(self, b=2, max_iterations=10, tol=1e-3):
+        self.b = b
+        self.max_iterations = max_iterations
+        self.tol = tol
 
     def flow(self, ts):
-
-        tensor = build_regime_tensor(ts, self.scales)
-
-        C = tensor[:,0]
-        S = tensor[:,1]
-        E = tensor[:,2]
-        T = tensor[:,3]
-
-        flow = []
-
-        for i in range(len(tensor)-1):
-
-            dC = C[i+1] - C[i]
-            dS = S[i+1] - S[i]
-            dE = E[i+1] - E[i]
-
-            flow.append([C[i],S[i],E[i],dC,dS,dE,T[i]])
-
-        return np.array(flow)
+        return rg_flow(
+            ts,
+            b=self.b,
+            max_iterations=self.max_iterations,
+            tol=self.tol,
+        )

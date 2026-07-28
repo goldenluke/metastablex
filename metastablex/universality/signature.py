@@ -1,5 +1,4 @@
 import numpy as np
-from scipy import stats
 
 def compute_signature(ts):
 

@@ -11,9 +11,9 @@ def compute_metrics(series):
 
     lyap = lyapunov_exponent(returns)
 
-    entropy = -np.sum(
-        np.histogram(returns,bins=20,density=True)[0]
-    )
+    hist, _ = np.histogram(returns, bins=20, density=True)
+    p = hist + 1e-12
+    entropy = -np.sum(p * np.log(p))
 
     complexity = entropy
 

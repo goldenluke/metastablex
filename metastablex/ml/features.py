@@ -6,7 +6,7 @@ def metastable_features(x):
     # =========================
     # GARANTIR 1D
     # =========================
-    x = torch.tensor(x, dtype=torch.float32)
+    x = torch.as_tensor(x, dtype=torch.float32)
 
     # 🔥 CORREÇÃO CRÍTICA
     if x.ndim > 1:

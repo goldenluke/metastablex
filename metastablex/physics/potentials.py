@@ -1,4 +1,3 @@
-import numpy as np
 
 # Ginzburg-Landau (bifurcação)
 def ginzburg_landau(a=0.1,b=1):

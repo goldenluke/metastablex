@@ -1,5 +1,3 @@
-import numpy as np
-import pandas as pd
 
 from metastablex.detectors.universal_detector import UniversalComplexityDetector
 

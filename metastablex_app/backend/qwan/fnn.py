@@ -23,14 +23,13 @@ def false_nearest_neighbors(series, max_dim=10, tau=2):
         for i, point in enumerate(embedded):
 
             dist, idx = tree.query(point, k=2)
-            neighbor = embedded[idx[1]]
 
             if dim < max_dim:
                 try:
                     next_dist = abs(
                         series[i + dim*tau] - series[idx[1] + dim*tau]
                     )
-                except:
+                except IndexError:
                     continue
 
                 if dist[1] == 0:

@@ -1,6 +1,4 @@
 import numpy as np
-import pandas as pd
-from scipy import stats
 
 # =====================================
 # COMPLEXITY METRICS
@@ -143,7 +141,6 @@ class UniversalComplexityDetector:
     def detect_regime(self, features):
 
         ac1 = features["ac1"]
-        var = features["variance"]
         entropy = features["entropy"]
 
         if ac1 > 0.7 and entropy < 1.0:

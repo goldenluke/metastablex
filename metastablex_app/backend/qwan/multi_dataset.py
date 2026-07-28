@@ -1,6 +1,5 @@
 import torch
 import pandas as pd
-import os
 
 SCENARIOS = {
     "low_noise": {"k": 2.0, "noise": 0.005},

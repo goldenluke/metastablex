@@ -1,13 +1,19 @@
 import numpy as np
 
+
 def lyapunov_exponent(ts):
-    ts = np.array(ts)
+    """
+    Proxy de Lyapunov: λ ≈ log(Var(x)), conforme documentado no
+    modelo QWAN. Não é o expoente de Lyapunov formal da teoria de
+    sistemas dinâmicos (que exigiria reconstrução do espaço de fase
+    e divergência de trajetórias vizinhas) — é uma aproximação de
+    sensibilidade via variância da série.
+    """
+    ts = np.array(ts, dtype=float)
 
-    diffs = np.abs(np.diff(ts))
+    var = np.var(ts)
 
-    diffs = diffs[diffs > 0]
+    if var <= 0:
+        return 0.0
 
-    if len(diffs) < 2:
-        return 0
-
-    return np.mean(np.log(diffs))
+    return float(np.log(var))

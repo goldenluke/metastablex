@@ -1,9 +1,9 @@
 import torch
-import torch.nn as nn
 import torch.optim as optim
 
 from .neural_operator import NeuralOperator
 from .batch_engine import evolve_batch
+from .data_batch import build_batch
 
 def train_model(df, municipios, epochs=50, device="cuda"):
 

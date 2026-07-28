@@ -1,11 +1,13 @@
 import numpy as np
 from scipy.integrate import odeint
 
-def sir(y, t, beta, gamma):
+def sir(y, t, beta, gamma, populacao):
     S, I, R = y
 
-    dSdt = -beta * S * I
-    dIdt = beta * S * I - gamma * I
+    # transmissão dependente da frequência: taxa de contato por
+    # indivíduo escala com a FRAÇÃO infectada (I/N), não com I bruto
+    dSdt = -beta * S * I / populacao
+    dIdt = beta * S * I / populacao - gamma * I
     dRdt = gamma * I
 
     return dSdt, dIdt, dRdt
@@ -24,7 +26,7 @@ def rodar_sir(populacao, infectados_iniciais, dias=100):
     beta = 0.3
     gamma = 0.1
 
-    ret = odeint(sir, y0, t, args=(beta, gamma))
+    ret = odeint(sir, y0, t, args=(beta, gamma, populacao))
     S, I, R = ret.T
 
     return t, S, I, R

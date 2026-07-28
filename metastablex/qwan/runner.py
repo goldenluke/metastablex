@@ -1,4 +1,3 @@
-import torch
 from .field import QWANField
 from .dynamics import evolve
 from .neural_operator import NeuralOperator

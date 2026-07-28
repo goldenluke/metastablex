@@ -1,4 +1,3 @@
-import numpy as np
 from metastablex.physics.engine import MetastableXEngine
 
 def generate_atlas(

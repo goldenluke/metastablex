@@ -23,7 +23,6 @@ def explain_municipio_advanced(nome, series, history, mode="medical"):
     ac_trend = ac_end - ac_start
 
     H = history[-1].get("H", 0)
-    I = history[-1].get("I", 0)
 
     # =========================
     # CLASSIFICAÇÕES

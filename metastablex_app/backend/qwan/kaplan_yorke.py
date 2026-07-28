@@ -1,18 +1,29 @@
 def kaplan_yorke_dimension(lyap):
+    """
+    D_KY = j + (Σ_{i=1}^{j} λ_i) / |λ_{j+1}|, onde j é o maior número
+    de expoentes (em ordem decrescente) cuja soma acumulada
+    permanece não-negativa.
+    """
 
     lyap = sorted(lyap, reverse=True)
 
-    total = 0
-    j = 0
+    total = 0.0
+    count = 0
 
-    for i, val in enumerate(lyap):
-        if total + val > 0:
-            total += val
-            j = i
-        else:
+    for val in lyap:
+        if total + val < 0:
             break
+        total += val
+        count += 1
 
-    if j+1 < len(lyap) and lyap[j+1] != 0:
-        return j + total / abs(lyap[j+1])
+    if count == len(lyap):
+        # soma de todos os expoentes ainda não-negativa: não há
+        # λ_{j+1} para o termo fracionário
+        return float(count)
 
-    return j
+    next_exp = lyap[count]
+
+    if next_exp == 0:
+        return float(count)
+
+    return count + total / abs(next_exp)

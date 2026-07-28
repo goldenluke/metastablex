@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import sys, os, time, requests
+import sys, os, requests
 
 # =========================
 # 🔧 PATH
@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, "metastablex"))
 # 📦 IMPORTS
 # =========================
 from metastablex.core.data_loader import load_population
-from metastablex.core.interpretation import *
+from metastablex.core.interpretation import interpretar_tendencia, interpretar_volatilidade
 from metastablex.core.hmm_model import fit_hmm
 from metastablex.core.energy import energia_livre
 from metastablex.core.critical import detectar_ruptura, sinais_criticos
